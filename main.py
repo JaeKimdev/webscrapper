@@ -1,16 +1,7 @@
-import requests
-from bs4 import BeautifulSoup
+from indeed import extract_indeed_pages, extract_indeed_jobs
 
-indeed_result = requests.get("https://au.indeed.com/jobs?q=python&l=Perth%20WA&limit=50")
+last_indeed_page = extract_indeed_pages()
 
-indeed_soup = BeautifulSoup(indeed_result.text, "html.parser")
+indeed_jobs = extract_indeed_jobs(last_indeed_page)
 
-pagination = indeed_soup.find("div", class_="pagination")
-
-links = pagination.find_all('a')
-
-pages = []
-
-for link in links:
-    pages.append(int(link.string))
-max_page = pages[-1]
+print(indeed_jobs)
