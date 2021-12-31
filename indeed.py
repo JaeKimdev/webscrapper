@@ -5,7 +5,7 @@ LIMIT = 50
 URL = "https://au.indeed.com/jobs?as_and=python&as_phr&as_any&as_not&as_ttl&as_cmp&jt=all&st&salary&radius=50&l=Western%20Australia&fromage=any&limit=50&sort&psf=advsrch&from=advancedsearch&vjk=7d34b0f4f9c24ea9"
 
 
-def extract_indeed_pages():
+def get_last_page():
     result = requests.get(URL)
     soup = BeautifulSoup(result.text, "html.parser")
     pagination = soup.find("div", class_="pagination")
@@ -41,7 +41,7 @@ def extract_job(html):
             'link': f"https://au.indeed.com/viewjob?jk={job_id}&from=web&vjs=3"}
 
 
-def extract_indeed_jobs(last_page):
+def extract_jobs(last_page):
     jobs = []
     for page in range(last_page):
         print(f"Scrapping page {page}")
@@ -51,4 +51,9 @@ def extract_indeed_jobs(last_page):
         for result in results:
             job = extract_job(result)
             jobs.append(job)
+    return jobs
+
+def get_jobs():
+    last_page = get_last_page()
+    jobs = extract_jobs(last_page)
     return jobs
